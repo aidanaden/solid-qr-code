@@ -3,7 +3,7 @@ import SolidHighlight from "solid-highlight";
 import "highlight.js/styles/stackoverflow-light.css";
 import "./index.css";
 
-import { QRCodeSVG, QRCodeCanvas } from "../../src";
+import { QRCodeSVG, QRCodeCanvas } from "solid-qr-code";
 
 const App: Component = () => {
   const [value, setValue] = createSignal(
