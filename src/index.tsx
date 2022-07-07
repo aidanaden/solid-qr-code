@@ -190,7 +190,7 @@ function QRCodeCanvas(_props: QRPropsCanvas) {
     "style",
     "imageSettings",
   ]);
-  const imgSrc = local.imageSettings?.src;
+  const imgSrc = local.imageSettings.src || "";
   let _canvas: HTMLCanvasElement;
   let _image: HTMLImageElement;
 
