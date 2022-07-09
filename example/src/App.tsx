@@ -1,9 +1,10 @@
-import { Component, createSignal } from "solid-js";
+import { Component, createEffect, createMemo, createSignal } from "solid-js";
 import SolidHighlight from "solid-highlight";
 import "highlight.js/styles/stackoverflow-light.css";
 import "./index.css";
 
-import { QRCodeSVG, QRCodeCanvas } from "solid-qr-code";
+// import { QRCodeSVG, QRCodeCanvas } from "solid-qr-code";
+import { QRCodeSVG, QRCodeCanvas } from "../../src/index";
 
 const App: Component = () => {
   const [value, setValue] = createSignal(
@@ -22,22 +23,10 @@ const App: Component = () => {
   const [imageSrc, setImageSrc] = createSignal(
     "https://static.zpao.com/favicon.png"
   );
-  const [imageExcavate, setImageExcavate] = createSignal(true);
   const [centerImage, setCenterImage] = createSignal(true);
 
   function makeExampleCode(componentName: string) {
-    const imageSettingsCode = includeImage()
-      ? `
-  imageSettings={{
-    src: "${imageSrc()}",
-    x: ${centerImage() ? "undefined" : imageX()},
-    y: ${centerImage() ? "undefined" : imageY()},
-    height: ${imageH()},
-    width: ${imageW()},
-    excavate: ${imageExcavate()},
-  }}`
-      : "";
-    return `import {${componentName}} from 'qrcode.react';
+    return `import {${componentName}} from 'solid-qr-code';
     
 <${componentName}
   value={"${value()}"}
@@ -45,11 +34,18 @@ const App: Component = () => {
   bgColor={"${bgColor()}"}
   fgColor={"${fgColor()}"}
   level={"${level()}"}
-  includeMargin={${includeMargin()}}${imageSettingsCode}
+  includeMargin={${includeMargin()}}
+  imageSettings={{
+    src: "${imageSrc()}",
+    x: ${centerImage() ? "undefined" : imageX()},
+    y: ${centerImage() ? "undefined" : imageY()},
+    height: ${imageH()},
+    width: ${imageW()},
+  }}
 />`;
   }
-  const svgCode = makeExampleCode("QRCodeSVG");
-  const canvasCode = makeExampleCode("QRCodeCanvas");
+  const svgCode = createMemo(() => makeExampleCode("QRCodeSVG"));
+  const canvasCode = createMemo(() => makeExampleCode("QRCodeCanvas"));
 
   return (
     <>
@@ -228,17 +224,6 @@ const App: Component = () => {
                 </label>
               </div>
             </fieldset>
-            <div>
-              <label>
-                Excavate ("dig" foreground to nearest whole module):
-                <br />
-                <input
-                  type="checkbox"
-                  checked={imageExcavate()}
-                  onChange={(e: any) => setImageExcavate(e.target.checked)}
-                />
-              </label>
-            </div>
           </fieldset>
         </div>
 
@@ -249,7 +234,7 @@ const App: Component = () => {
             </h2>
             <div>
               <SolidHighlight language="javascript" autoDetect={false}>
-                {svgCode}
+                {svgCode()}
               </SolidHighlight>
             </div>
 
@@ -268,7 +253,6 @@ const App: Component = () => {
                       width: imageW(),
                       x: centerImage() ? undefined : imageX(),
                       y: centerImage() ? undefined : imageY(),
-                      excavate: imageExcavate(),
                     }
                   : undefined
               }
@@ -281,7 +265,7 @@ const App: Component = () => {
             </h2>
             <div>
               <SolidHighlight language="javascript" autoDetect={false}>
-                {canvasCode}
+                {canvasCode()}
               </SolidHighlight>
             </div>
             <QRCodeCanvas
@@ -299,7 +283,6 @@ const App: Component = () => {
                       width: imageW(),
                       x: centerImage() ? undefined : imageX(),
                       y: centerImage() ? undefined : imageY(),
-                      excavate: imageExcavate(),
                     }
                   : undefined
               }

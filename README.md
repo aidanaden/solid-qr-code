@@ -75,14 +75,13 @@ render(() => <QRCode value="https://solidjs.com/" renderAs="canvas" />, document
 
 ### `imageSettings`
 
-| field      | type      | default value     |
-| ---------- | --------- | ----------------- |
-| `src`      | `string`  |
-| `x`        | `number`  | none, will center |
-| `y`        | `number`  | none, will center |
-| `height`   | `number`  | 10% of `size`     |
-| `width`    | `number`  | 10% of `size`     |
-| `excavate` | `boolean` | `false`           |
+| field    | type     | default value     |
+| -------- | -------- | ----------------- |
+| `src`    | `string` |
+| `x`      | `number` | none, will center |
+| `y`      | `number` | none, will center |
+| `height` | `number` | 10% of `size`     |
+| `width`  | `number` | 10% of `size`     |
 
 ## Custom Styles
 

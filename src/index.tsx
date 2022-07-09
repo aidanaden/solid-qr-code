@@ -4,11 +4,13 @@ import {
   JSX,
   mergeProps,
   splitProps,
+  on,
+  createMemo,
+  Show,
 } from "solid-js";
 import qrcodegen from "./third-party/qrcodegen";
 
 type Modules = ReturnType<qrcodegen.QrCode["getModules"]>;
-type Excavation = { x: number; y: number; w: number; h: number };
 
 const ERROR_LEVEL_MAP: { [index: string]: qrcodegen.QrCode.Ecc } = {
   L: qrcodegen.QrCode.Ecc.LOW,
@@ -21,7 +23,6 @@ type ImageSettings = {
   src: string;
   height: number;
   width: number;
-  excavate: boolean;
   x?: number;
   y?: number;
 };
@@ -99,22 +100,6 @@ function generatePath(modules: Modules, margin: number = 0): string {
   return ops.join("");
 }
 
-// We could just do this in generatePath, except that we want to support
-// non-Path2D canvas, so we need to keep it an explicit step.
-function excavateModules(modules: Modules, excavation: Excavation): Modules {
-  return modules.slice().map((row, y) => {
-    if (y < excavation.y || y >= excavation.y + excavation.h) {
-      return row;
-    }
-    return row.map((cell, x) => {
-      if (x < excavation.x || x >= excavation.x + excavation.w) {
-        return cell;
-      }
-      return false;
-    });
-  });
-}
-
 function getImageSettings(
   cells: Modules,
   size: number,
@@ -125,7 +110,6 @@ function getImageSettings(
   y: number;
   h: number;
   w: number;
-  excavation: Excavation | null;
 } {
   if (imageSettings == null) {
     return null;
@@ -145,16 +129,7 @@ function getImageSettings(
       ? cells.length / 2 - h / 2
       : imageSettings.y * scale;
 
-  let excavation = null;
-  if (imageSettings.excavate) {
-    let floorX = Math.floor(x);
-    let floorY = Math.floor(y);
-    let ceilW = Math.ceil(w + x - floorX);
-    let ceilH = Math.ceil(h + y - floorY);
-    excavation = { x: floorX, y: floorY, w: ceilW, h: ceilH };
-  }
-
-  return { x, y, h, w, excavation };
+  return { x, y, h, w };
 }
 
 // For canvas we're going to switch our drawing mode based on whether or not
@@ -190,9 +165,9 @@ function QRCodeCanvas(_props: QRPropsCanvas) {
     "style",
     "imageSettings",
   ]);
-  const imgSrc = local.imageSettings.src || "";
-  let _canvas: HTMLCanvasElement;
-  let _image: HTMLImageElement;
+  const imgSrc = createMemo(() => local.imageSettings?.src || "");
+  let canvas: HTMLCanvasElement;
+  let image: HTMLImageElement;
 
   // We're just using this state to trigger rerenders when images load. We
   // Don't actually read the value anywhere. A smarter use of useEffect would
@@ -202,41 +177,42 @@ function QRCodeCanvas(_props: QRPropsCanvas) {
   createEffect(() => {
     // Always update the canvas. It's cheap enough and we want to be correct
     // with the current state.
-    if (_canvas != null) {
-      const canvas = _canvas;
-
+    if (canvas) {
       const ctx = canvas.getContext("2d");
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
       if (!ctx) {
         return;
       }
 
-      let cells = qrcodegen.QrCode.encodeText(
-        local.value,
-        ERROR_LEVEL_MAP[local.level]
-      ).getModules();
+      if (!isImgLoaded()) {
+        return;
+      }
 
-      const margin = local.includeMargin ? MARGIN_SIZE : 0;
-      const numCells = cells.length + margin * 2;
-      const calculatedImageSettings = getImageSettings(
-        cells,
-        local.size,
-        local.includeMargin,
-        local.imageSettings
+      let cells = createMemo(() =>
+        qrcodegen.QrCode.encodeText(
+          local.value,
+          ERROR_LEVEL_MAP[local.level]
+        ).getModules()
       );
 
-      const image = _image;
+      const margin = createMemo(() => (local.includeMargin ? MARGIN_SIZE : 0));
+      const numCells = cells().length + margin() * 2;
+      const calculatedImageSettings = createMemo(() =>
+        getImageSettings(
+          cells(),
+          local.size,
+          local.includeMargin,
+          local.imageSettings
+        )
+      );
+
       const haveImageToRender =
-        calculatedImageSettings != null &&
+        calculatedImageSettings() != null &&
         image !== null &&
         image.complete &&
         image.naturalHeight !== 0 &&
         image.naturalWidth !== 0;
-
-      if (haveImageToRender) {
-        if (calculatedImageSettings.excavation != null) {
-          cells = excavateModules(cells, calculatedImageSettings.excavation);
-        }
-      }
 
       // We're going to scale this so that the number of drawable units
       // matches the number of cells. This avoids rounding issues, but does
@@ -254,12 +230,12 @@ function QRCodeCanvas(_props: QRPropsCanvas) {
       ctx.fillStyle = local.fgColor;
       if (SUPPORTS_PATH2D) {
         // $FlowFixMe: Path2D c'tor doesn't support args yet.
-        ctx.fill(new Path2D(generatePath(cells, margin)));
+        ctx.fill(new Path2D(generatePath(cells(), margin())));
       } else {
-        cells.forEach(function (row, rdx) {
+        cells().forEach(function (row, rdx) {
           row.forEach(function (cell, cdx) {
             if (cell) {
-              ctx.fillRect(cdx + margin, rdx + margin, 1, 1);
+              ctx.fillRect(cdx + margin(), rdx + margin(), 1, 1);
             }
           });
         });
@@ -268,47 +244,50 @@ function QRCodeCanvas(_props: QRPropsCanvas) {
       if (haveImageToRender) {
         ctx.drawImage(
           image,
-          calculatedImageSettings.x + margin,
-          calculatedImageSettings.y + margin,
-          calculatedImageSettings.w,
-          calculatedImageSettings.h
+          calculatedImageSettings().x + margin(),
+          calculatedImageSettings().y + margin(),
+          calculatedImageSettings().w,
+          calculatedImageSettings().h
         );
+        console.log("calculated image settings: ", calculatedImageSettings());
+        console.log("have image to render: ", haveImageToRender);
+        console.log("image ref: ", image);
+        console.log("canvas ref: ", canvas);
+        console.log("img src: ", imgSrc());
       }
     }
   });
 
   // Ensure we mark image loaded as false here so we trigger updating the
   // canvas in our other effect.
-  createEffect(() => {
-    if (imgSrc) {
-      setIsImageLoaded(false);
-    }
-  });
+  createEffect(
+    on(imgSrc, (imgSrc) => {
+      console.log("image src: ", imgSrc);
+      if (imgSrc) {
+        setIsImageLoaded(false);
+      }
+    })
+  );
 
-  const canvasStyle = { height: local.size, width: local.size, ...others };
-  let img = null;
-  if (imgSrc != null) {
-    img = (
-      <img
-        src={imgSrc}
-        style={{ display: "none" }}
-        onLoad={() => {
-          setIsImageLoaded(true);
-        }}
-        ref={_image}
-      />
-    );
-  }
   return (
     <>
       <canvas
-        style={canvasStyle}
+        style={{ height: local.size, width: local.size, ...others }}
         height={local.size}
         width={local.size}
-        ref={_canvas}
+        ref={canvas}
         {...others}
       />
-      {img}
+      <Show when={imgSrc()}>
+        <img
+          src={imgSrc()}
+          style={{ display: "none" }}
+          onLoad={() => {
+            setIsImageLoaded(true);
+          }}
+          ref={image}
+        />
+      </Show>
     </>
   );
 }
@@ -331,37 +310,23 @@ function QRCodeSVG(_props: QRPropsSVG) {
     "includeMargin",
     "imageSettings",
   ]);
-  let cells = qrcodegen.QrCode.encodeText(
-    local.value,
-    ERROR_LEVEL_MAP[local.level]
-  ).getModules();
-
-  const margin = local.includeMargin ? MARGIN_SIZE : 0;
-  const numCells = cells.length + margin * 2;
-  const calculatedImageSettings = getImageSettings(
-    cells,
-    local.size,
-    local.includeMargin,
-    local.imageSettings
+  let cells = createMemo(() =>
+    qrcodegen.QrCode.encodeText(
+      local.value,
+      ERROR_LEVEL_MAP[local.level]
+    ).getModules()
   );
 
-  let image = null;
-  if (local.imageSettings != null && calculatedImageSettings != null) {
-    if (calculatedImageSettings.excavation != null) {
-      cells = excavateModules(cells, calculatedImageSettings.excavation);
-    }
-
-    image = (
-      <image
-        xlink-Href={local.imageSettings.src}
-        height={calculatedImageSettings.h}
-        width={calculatedImageSettings.w}
-        x={calculatedImageSettings.x + margin}
-        y={calculatedImageSettings.y + margin}
-        preserveAspectRatio="none"
-      />
-    );
-  }
+  const margin = createMemo(() => (local.includeMargin ? MARGIN_SIZE : 0));
+  const numCells = cells().length + margin() * 2;
+  const calculatedImageSettings = createMemo(() =>
+    getImageSettings(
+      cells(),
+      local.size,
+      local.includeMargin,
+      local.imageSettings
+    )
+  );
 
   // Drawing strategy: instead of a rect per module, we're going to create a
   // single path for the dark modules and layer that on top of a light rect,
@@ -369,7 +334,7 @@ function QRCodeSVG(_props: QRPropsSVG) {
   // way faster than DOM ops.
   // For level 1, 441 nodes -> 2
   // For level 40, 31329 -> 2
-  const fgPath = generatePath(cells, margin);
+  const fgPath = generatePath(cells(), margin());
 
   return (
     <svg
@@ -384,7 +349,18 @@ function QRCodeSVG(_props: QRPropsSVG) {
         shape-rendering="crispEdges"
       />
       <path fill={local.fgColor} d={fgPath} shape-rendering="crispEdges" />
-      {image}
+      <Show
+        when={local.imageSettings != null && calculatedImageSettings() != null}
+      >
+        <image
+          href={local.imageSettings?.src}
+          height={calculatedImageSettings().h}
+          width={calculatedImageSettings().w}
+          x={calculatedImageSettings().x + margin()}
+          y={calculatedImageSettings().y + margin()}
+          preserveAspectRatio="none"
+        />
+      </Show>
     </svg>
   );
 }

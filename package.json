@@ -1,6 +1,6 @@
 {
   "name": "solid-qr-code",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Solid component to generate QR codes, based on qrcode.react",
   "author": {
     "name": "Aidan Aden",
