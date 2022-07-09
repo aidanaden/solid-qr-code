@@ -248,11 +248,6 @@ function QRCodeCanvas(_props: QRPropsCanvas) {
           calculatedImageSettings().w,
           calculatedImageSettings().h
         );
-        console.log("calculated image settings: ", calculatedImageSettings());
-        console.log("have image to render: ", haveImageToRender);
-        console.log("image ref: ", image);
-        console.log("canvas ref: ", canvas);
-        console.log("img src: ", imgSrc());
       }
     }
   });
@@ -261,7 +256,6 @@ function QRCodeCanvas(_props: QRPropsCanvas) {
   // canvas in our other effect.
   createEffect(
     on(imgSrc, (imgSrc) => {
-      console.log("image src: ", imgSrc);
       if (imgSrc) {
         setIsImageLoaded(false);
       }

@@ -1,10 +1,9 @@
-import { Component, createEffect, createMemo, createSignal } from "solid-js";
+import { Component, createMemo, createSignal } from "solid-js";
 import SolidHighlight from "solid-highlight";
 import "highlight.js/styles/stackoverflow-light.css";
 import "./index.css";
 
-// import { QRCodeSVG, QRCodeCanvas } from "solid-qr-code";
-import { QRCodeSVG, QRCodeCanvas } from "../../src/index";
+import { QRCodeSVG, QRCodeCanvas } from "solid-qr-code";
 
 const App: Component = () => {
   const [value, setValue] = createSignal("https://www.solidjs.com/");
