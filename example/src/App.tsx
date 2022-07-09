@@ -7,9 +7,7 @@ import "./index.css";
 import { QRCodeSVG, QRCodeCanvas } from "../../src/index";
 
 const App: Component = () => {
-  const [value, setValue] = createSignal(
-    "https://picturesofpeoplescanningqrcodes.tumblr.com/"
-  );
+  const [value, setValue] = createSignal("https://www.solidjs.com/");
   const [size, setSize] = createSignal(128);
   const [fgColor, setFgColor] = createSignal("#000000");
   const [bgColor, setBgColor] = createSignal("#ffffff");

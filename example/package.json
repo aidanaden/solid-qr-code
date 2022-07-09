@@ -16,6 +16,6 @@
   "dependencies": {
     "solid-highlight": "^0.1.11",
     "solid-js": "^1.4.2",
-    "solid-qr-code": "^0.0.3"
+    "solid-qr-code": "^0.0.4"
   }
 }

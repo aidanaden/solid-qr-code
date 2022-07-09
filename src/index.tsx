@@ -100,34 +100,36 @@ function generatePath(modules: Modules, margin: number = 0): string {
   return ops.join("");
 }
 
-function getImageSettings(
-  cells: Modules,
-  size: number,
-  includeMargin: boolean,
-  imageSettings?: ImageSettings
-): null | {
+type ImageSettingsProps = {
+  cells: Modules;
+  size: number;
+  includeMargin: boolean;
+  imageSettings?: ImageSettings;
+};
+
+function getImageSettings(props: ImageSettingsProps): null | {
   x: number;
   y: number;
   h: number;
   w: number;
 } {
-  if (imageSettings == null) {
+  if (props.imageSettings == null) {
     return null;
   }
-  const margin = includeMargin ? MARGIN_SIZE : 0;
-  const numCells = cells.length + margin * 2;
-  const defaultSize = Math.floor(size * DEFAULT_IMG_SCALE);
-  const scale = numCells / size;
-  const w = (imageSettings.width || defaultSize) * scale;
-  const h = (imageSettings.height || defaultSize) * scale;
+  const margin = props.includeMargin ? MARGIN_SIZE : 0;
+  const numCells = props.cells.length + margin * 2;
+  const defaultSize = Math.floor(props.size * DEFAULT_IMG_SCALE);
+  const scale = numCells / props.size;
+  const w = (props.imageSettings.width || defaultSize) * scale;
+  const h = (props.imageSettings.height || defaultSize) * scale;
   const x =
-    imageSettings.x == null
-      ? cells.length / 2 - w / 2
-      : imageSettings.x * scale;
+    props.imageSettings.x == null
+      ? props.cells.length / 2 - w / 2
+      : props.imageSettings.x * scale;
   const y =
-    imageSettings.y == null
-      ? cells.length / 2 - h / 2
-      : imageSettings.y * scale;
+    props.imageSettings.y == null
+      ? props.cells.length / 2 - h / 2
+      : props.imageSettings.y * scale;
 
   return { x, y, h, w };
 }
@@ -156,16 +158,13 @@ function QRCodeCanvas(_props: QRPropsCanvas) {
   };
   const props = mergeProps(defaultProps, _props);
   const [local, others] = splitProps(props, [
-    "value",
     "size",
     "level",
     "bgColor",
     "fgColor",
     "includeMargin",
-    "style",
-    "imageSettings",
   ]);
-  const imgSrc = createMemo(() => local.imageSettings?.src || "");
+  const imgSrc = createMemo(() => others.imageSettings?.src || "");
   let canvas: HTMLCanvasElement;
   let image: HTMLImageElement;
 
@@ -191,20 +190,20 @@ function QRCodeCanvas(_props: QRPropsCanvas) {
 
       let cells = createMemo(() =>
         qrcodegen.QrCode.encodeText(
-          local.value,
+          others.value,
           ERROR_LEVEL_MAP[local.level]
         ).getModules()
       );
 
       const margin = createMemo(() => (local.includeMargin ? MARGIN_SIZE : 0));
-      const numCells = cells().length + margin() * 2;
+      const numCells = createMemo(() => cells().length + margin() * 2);
       const calculatedImageSettings = createMemo(() =>
-        getImageSettings(
-          cells(),
-          local.size,
-          local.includeMargin,
-          local.imageSettings
-        )
+        getImageSettings({
+          cells: cells(),
+          size: local.size,
+          includeMargin: local.includeMargin,
+          imageSettings: others.imageSettings,
+        })
       );
 
       const haveImageToRender =
@@ -220,12 +219,12 @@ function QRCodeCanvas(_props: QRPropsCanvas) {
       // blocks, only in environments that don't support Path2D.
       const pixelRatio = window.devicePixelRatio || 1;
       canvas.height = canvas.width = local.size * pixelRatio;
-      const scale = (local.size / numCells) * pixelRatio;
+      const scale = (local.size / numCells()) * pixelRatio;
       ctx.scale(scale, scale);
 
       // Draw solid background, only paint dark modules.
       ctx.fillStyle = local.bgColor;
-      ctx.fillRect(0, 0, numCells, numCells);
+      ctx.fillRect(0, 0, numCells(), numCells());
 
       ctx.fillStyle = local.fgColor;
       if (SUPPORTS_PATH2D) {
@@ -302,30 +301,26 @@ function QRCodeSVG(_props: QRPropsSVG) {
   };
   const props = mergeProps(defaultProps, _props);
   const [local, others] = splitProps(props, [
-    "value",
     "size",
     "level",
     "bgColor",
     "fgColor",
     "includeMargin",
-    "imageSettings",
   ]);
-  let cells = createMemo(() =>
-    qrcodegen.QrCode.encodeText(
-      local.value,
-      ERROR_LEVEL_MAP[local.level]
-    ).getModules()
-  );
+  let cells = createMemo(() => {
+    const error = ERROR_LEVEL_MAP[local.level];
+    return qrcodegen.QrCode.encodeText(others.value, error).getModules();
+  });
 
   const margin = createMemo(() => (local.includeMargin ? MARGIN_SIZE : 0));
-  const numCells = cells().length + margin() * 2;
+  const numCells = createMemo(() => cells().length + margin() * 2);
   const calculatedImageSettings = createMemo(() =>
-    getImageSettings(
-      cells(),
-      local.size,
-      local.includeMargin,
-      local.imageSettings
-    )
+    getImageSettings({
+      cells: cells(),
+      size: local.size,
+      includeMargin: local.includeMargin,
+      imageSettings: others.imageSettings,
+    })
   );
 
   // Drawing strategy: instead of a rect per module, we're going to create a
@@ -334,26 +329,24 @@ function QRCodeSVG(_props: QRPropsSVG) {
   // way faster than DOM ops.
   // For level 1, 441 nodes -> 2
   // For level 40, 31329 -> 2
-  const fgPath = generatePath(cells(), margin());
+  const fgPath = createMemo(() => generatePath(cells(), margin()));
 
   return (
     <svg
       height={local.size}
       width={local.size}
-      viewBox={`0 0 ${numCells} ${numCells}`}
+      viewBox={`0 0 ${numCells()} ${numCells()}`}
       {...others}
     >
       <path
         fill={local.bgColor}
-        d={`M0,0 h${numCells}v${numCells}H0z`}
+        d={`M0,0 h${numCells()}v${numCells()}H0z`}
         shape-rendering="crispEdges"
       />
-      <path fill={local.fgColor} d={fgPath} shape-rendering="crispEdges" />
-      <Show
-        when={local.imageSettings != null && calculatedImageSettings() != null}
-      >
+      <path fill={local.fgColor} d={fgPath()} shape-rendering="crispEdges" />
+      <Show when={others.imageSettings && calculatedImageSettings()}>
         <image
-          href={local.imageSettings?.src}
+          href={others.imageSettings?.src}
           height={calculatedImageSettings().h}
           width={calculatedImageSettings().w}
           x={calculatedImageSettings().x + margin()}
