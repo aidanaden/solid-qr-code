@@ -164,7 +164,9 @@ function QRCodeCanvas(_props: QRPropsCanvas) {
     "fgColor",
     "includeMargin",
   ]);
-  const imgSrc = createMemo(() => others.imageSettings?.src || "");
+  const imgSrc = createMemo(() =>
+    others.imageSettings ? others.imageSettings.src : ""
+  );
   let canvas: HTMLCanvasElement;
   let image: HTMLImageElement;
 
@@ -340,7 +342,7 @@ function QRCodeSVG(_props: QRPropsSVG) {
       <path fill={local.fgColor} d={fgPath()} shape-rendering="crispEdges" />
       <Show when={others.imageSettings && calculatedImageSettings()}>
         <image
-          href={others.imageSettings?.src}
+          href={others.imageSettings ? others.imageSettings.src : ""}
           height={calculatedImageSettings().h}
           width={calculatedImageSettings().w}
           x={calculatedImageSettings().x + margin()}
