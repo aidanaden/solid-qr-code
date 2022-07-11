@@ -682,10 +682,10 @@ solid-js@^1.3.3, solid-js@^1.4.2:
   resolved "https://registry.yarnpkg.com/solid-js/-/solid-js-1.4.7.tgz#c174199c9248bcdceb66fa1b216348eef4541dfe"
   integrity sha512-u3hoe5w3xseAc/8zLwYaQVGanWXknMMQkzryNz7lOPy2ygW6DhCtfMseun4kLflRNRzrUUpTV3W5p7j2SGcHCQ==
 
-solid-qr-code@^0.0.6:
-  version "0.0.6"
-  resolved "https://registry.yarnpkg.com/solid-qr-code/-/solid-qr-code-0.0.6.tgz#00d29749d07362d8315755644a5ffad3cfd93108"
-  integrity sha512-UUioHcfKQQYKEkYnAoqsDvpvlMI2C7o5KdP6P3dr/UxFcnZO8/CzeV6YGSSdT0dNhXjbxFyOlKPui3ayxHrN7g==
+solid-qr-code@^0.0.7:
+  version "0.0.7"
+  resolved "https://registry.yarnpkg.com/solid-qr-code/-/solid-qr-code-0.0.7.tgz#e02d11b9b5a891de129f6101d854c9f86cac6c30"
+  integrity sha512-iB3QA3Yy2B2ucxfNzDw+/tppMyBj+4IlXHpkKM16Fr1cy1Sm7eNGc93Z+j8UWOCLF4+BwvfO4JeFX6914V43pg==
   dependencies:
     qr.js "^0.0.0"
     solid-js "^1.4.2"
