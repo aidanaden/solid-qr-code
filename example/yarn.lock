@@ -559,10 +559,10 @@ has@^1.0.3:
   dependencies:
     function-bind "^1.1.1"
 
-highlight.js@^11.5.1:
-  version "11.5.1"
-  resolved "https://registry.yarnpkg.com/highlight.js/-/highlight.js-11.5.1.tgz#027c24e4509e2f4dcd00b4a6dda542ce0a1f7aea"
-  integrity sha512-LKzHqnxr4CrD2YsNoIf/o5nJ09j4yi/GcH5BnYz9UnVpZdS4ucMgvP61TDty5xJcFGRjnH4DpujkS9bHT3hq0Q==
+highlight.js@^11.6.0:
+  version "11.6.0"
+  resolved "https://registry.yarnpkg.com/highlight.js/-/highlight.js-11.6.0.tgz#a50e9da05763f1bb0c1322c8f4f755242cff3f5a"
+  integrity sha512-ig1eqDzJaB0pqEvlPVIpSSyMaO92bH1N2rJpLMN/nX396wTpDA4Eq0uK+7I/2XG17pFaaKE0kjV/XPeGt7Evjw==
 
 html-entities@2.3.2:
   version "2.3.2"
@@ -669,26 +669,31 @@ semver@^6.3.0:
   resolved "https://registry.yarnpkg.com/semver/-/semver-6.3.0.tgz#ee0a64c8af5e8ceea67687b133761e1becbd1d3d"
   integrity sha512-b39TBaTSfV6yBrapU89p5fKekE2m/NwnDocOVruQFS1/veMgdzuPcnOM34M6CwxW8jH/lxEa5rBoDeUwu5HHTw==
 
-solid-highlight@^0.1.11:
-  version "0.1.11"
-  resolved "https://registry.yarnpkg.com/solid-highlight/-/solid-highlight-0.1.11.tgz#35f2e0c4c882e4c7315f5ffab32d45b5494aba04"
-  integrity sha512-9aVDPr+v8Q6AdSZ52qC4HxcZjPIFdWNPDk+UQu9EH0YsfTeNURqL2tfcuMz6Perd0ZhnCGSHsDXqlmIRedhlcw==
+solid-highlight@^0.1.12:
+  version "0.1.12"
+  resolved "https://registry.yarnpkg.com/solid-highlight/-/solid-highlight-0.1.12.tgz#c4890b9a0ae3ad7301a3a160db9da8cfdc7cadd2"
+  integrity sha512-1zTiNeuD8SDjil//wcdNGeYVrsgkhVdyHD65WBuO2SV33onTRHXZR8agH60Kpe9GcFmjDmz0UwKWj1zFXesnig==
   dependencies:
-    highlight.js "^11.5.1"
-    solid-js "^1.4.2"
+    highlight.js "^11.6.0"
+    solid-js "^1.4.8"
 
-solid-js@^1.3.3, solid-js@^1.4.2:
+solid-js@^1.3.3:
   version "1.4.7"
   resolved "https://registry.yarnpkg.com/solid-js/-/solid-js-1.4.7.tgz#c174199c9248bcdceb66fa1b216348eef4541dfe"
   integrity sha512-u3hoe5w3xseAc/8zLwYaQVGanWXknMMQkzryNz7lOPy2ygW6DhCtfMseun4kLflRNRzrUUpTV3W5p7j2SGcHCQ==
 
-solid-qr-code@^0.0.7:
-  version "0.0.7"
-  resolved "https://registry.yarnpkg.com/solid-qr-code/-/solid-qr-code-0.0.7.tgz#e02d11b9b5a891de129f6101d854c9f86cac6c30"
-  integrity sha512-iB3QA3Yy2B2ucxfNzDw+/tppMyBj+4IlXHpkKM16Fr1cy1Sm7eNGc93Z+j8UWOCLF4+BwvfO4JeFX6914V43pg==
+solid-js@^1.4.8:
+  version "1.4.8"
+  resolved "https://registry.yarnpkg.com/solid-js/-/solid-js-1.4.8.tgz#a1e7f56c17d64c1729c6fd36fe513ca283e78dbd"
+  integrity sha512-XErZdnnYYXF7OwGSUAPcua2y5/ELB/c53zFCpWiEGqxTNoH1iQghzI8EsHJXk06sNn+Z/TGhb8bPDNNGSgimag==
+
+solid-qr-code@^0.0.8:
+  version "0.0.8"
+  resolved "https://registry.yarnpkg.com/solid-qr-code/-/solid-qr-code-0.0.8.tgz#b9593fa37c19f5f810088816bafe6fcea848305d"
+  integrity sha512-K7LC3IKvyRag6WW7/ijJl32pBmoC3EzZ7AuydyaAVKSmlwukJmqvrFkrxaA1bOWabYJhzP9qwLbjDVlCUP2BwQ==
   dependencies:
     qr.js "^0.0.0"
-    solid-js "^1.4.2"
+    solid-js "^1.4.8"
 
 solid-refresh@^0.4.0:
   version "0.4.1"
