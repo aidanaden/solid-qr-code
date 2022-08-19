@@ -9,7 +9,7 @@
 [download-image]: https://img.shields.io/npm/dm/solid-qr-code.svg
 [download-url]: https://npmjs.org/package/solid-qr-code
 
-[![solid-top-loading-bar](https://nodei.co/npm/solid-qr-code.png)](https://npmjs.org/package/solid-qr-code)
+[![solid-qr-code](https://nodei.co/npm/solid-qr-code.png)](https://npmjs.org/package/solid-qr-code)
 
 A Solid component to generate [QR codes](http://en.wikipedia.org/wiki/QR_code) for rendering to the DOM. This package was ported to Solid from the [qrcode.react](https://github.com/zpao/qrcode.react) package made by [zpao](https://github.com/zpao)
 
