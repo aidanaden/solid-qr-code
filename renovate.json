@@ -10,8 +10,6 @@
         "bump",
         "digest",
         "rollback",
-        "pin",
-        "pinDigest",
         "lockFileMaintenance"
       ],
       "schedule": ["every weekend"]
