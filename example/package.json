@@ -9,13 +9,13 @@
   },
   "license": "MIT",
   "devDependencies": {
-    "typescript": "4.7.4",
+    "typescript": "4.8.4",
     "vite": "3.1.7",
-    "vite-plugin-solid": "2.2.6"
+    "vite-plugin-solid": "2.3.9"
   },
   "dependencies": {
     "solid-highlight": "0.1.12",
-    "solid-js": "1.4.8",
+    "solid-js": "1.5.7",
     "solid-qr-code": "0.0.8"
   }
 }
