@@ -1,6 +1,20 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": [
-    "config:base"
+  "extends": ["config:base"],
+  "packageRules": [
+    {
+      "groupName": "all packages non-major updates",
+      "matchUpdateTypes": [
+        "minor",
+        "patch",
+        "bump",
+        "digest",
+        "rollback",
+        "pin",
+        "pinDigest",
+        "lockFileMaintenance"
+      ],
+      "schedule": ["every weekend"]
+    }
   ]
 }
