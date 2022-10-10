@@ -4,14 +4,7 @@
   "packageRules": [
     {
       "groupName": "all packages non-major updates",
-      "matchUpdateTypes": [
-        "minor",
-        "patch",
-        "bump",
-        "digest",
-        "rollback",
-        "lockFileMaintenance"
-      ],
+      "matchUpdateTypes": ["minor", "patch", "bump"],
       "schedule": ["every weekend"]
     }
   ]
