@@ -17,7 +17,8 @@
     ".": {
       "solid": "./dist/source/index.jsx",
       "default": "./dist/esm/index.js",
-      "import": "./dist/esm/index.js"
+      "import": "./dist/esm/index.js",
+      "types": "./dist/types/index.d.ts"
     }
   },
   "sideEffects": false,
