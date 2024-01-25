@@ -1,0 +1,23 @@
+{
+  "name": "example",
+  "type": "module",
+  "scripts": {
+    "dev": "vinxi dev",
+    "build": "vinxi build",
+    "start": "vinxi start"
+  },
+  "dependencies": {
+    "@solidjs/start": "^0.4.10",
+    "solid-highlight": "^0.1.16",
+    "solid-js": "^1.8.11",
+    "vinxi": "^0.1.4"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.4.16",
+    "postcss": "^8.4.33",
+    "tailwindcss": "^3.4.1"
+  }
+}

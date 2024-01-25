@@ -2,57 +2,88 @@
   "name": "solid-qr-code",
   "version": "0.0.9",
   "description": "Solid component to generate QR codes, based on qrcode.react",
+  "license": "MIT",
   "author": {
     "name": "Aidan Aden",
-    "email": "vroomvroom@mailbox.org",
+    "email": "aidan@u.nus.edu",
     "url": "https://github.com/aidanaden"
   },
-  "license": "MIT",
-  "type": "module",
-  "source": "src/index.tsx",
-  "main": "dist/esm/index.js",
-  "module": "dist/esm/index.js",
-  "types": "dist/types/index.d.ts",
-  "exports": {
-    ".": {
-      "solid": "./dist/source/index.jsx",
-      "default": "./dist/esm/index.js",
-      "import": "./dist/esm/index.js"
-    }
+  "contributors": [],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/aidanaden/solid-qr-code.git"
   },
-  "sideEffects": false,
-  "engines": {
-    "node": ">=10",
-    "yarn": ">=1.22.5"
+  "homepage": "https://github.com/aidanaden/solid-qr-code#readme",
+  "bugs": {
+    "url": "https://github.com/aidanaden/solid-qr-code/issues"
   },
   "files": [
     "dist",
     "src"
   ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "private": false,
+  "sideEffects": false,
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "browser": {},
+  "exports": {
+    "solid": {
+      "development": "./dist/dev.jsx",
+      "import": "./dist/index.jsx"
+    },
+    "development": {
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/dev.js"
+      }
+    },
+    "import": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "typesVersions": {},
   "scripts": {
-    "dev": "cd example && vite",
-    "build": "rollup -c",
-    "prepublishOnly": "yarn build",
-    "serve": "vite preview"
-  },
-  "devDependencies": {
-    "rollup": "^2.78.1",
-    "rollup-preset-solid": "^1.4.0",
-    "typescript": "^4.7.4",
-    "vite": "^3.0.9",
-    "vite-plugin-solid": "^2.3.0"
-  },
-  "dependencies": {
-    "qr.js": "^0.0.0",
-    "solid-js": "^1.4.8"
+    "dev": "vite serve dev",
+    "build": "tsup",
+    "prepublishOnly": "pnpm build",
+    "format": "pnpx @biomejs/biome check --apply . \"./src/**/*.{json,css,tsx,jsx}\" \"./dev/**/*.{json,css,tsx,jsx}\"",
+    "lint": "concurrently pnpm:lint:*",
+    "lint:code": "pnpm eslint --ignore-path .gitignore  --fix ./src/**/*.tsx",
+    "lint:types": "pnpm tsc-silent --noEmit -p tsconfig.json --suppress @/node_modules/@solidjs/start/",
+    "update-deps": "pnpm up -Li"
   },
   "peerDependencies": {
-    "qr.js": "^0.0.0",
-    "solid-js": "^1.4.8"
+    "solid-js": "^1.8.0"
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/aidanaden/solid-qr-code.git"
+  "devDependencies": {
+    "@biomejs/biome": "1.5.2",
+    "@changesets/cli": "^2.27.1",
+    "@types/highlight-words-core": "^1.2.3",
+    "@types/node": "^20.11.4",
+    "@typescript-eslint/eslint-plugin": "^6.19.0",
+    "@typescript-eslint/parser": "^6.19.0",
+    "concurrently": "^8.2.2",
+    "esbuild": "^0.19.11",
+    "esbuild-plugin-solid": "^0.5.0",
+    "eslint": "^8.56.0",
+    "eslint-plugin-eslint-comments": "^3.2.0",
+    "eslint-plugin-no-only-tests": "^3.1.0",
+    "highlight-words-core": "^1.2.2",
+    "jsdom": "^23.2.0",
+    "solid-js": "^1.8.11",
+    "tsc-silent": "^1.2.2",
+    "tsup": "^8.0.1",
+    "tsup-preset-solid": "^2.2.0",
+    "typescript": "^5.3.3"
+  },
+  "engines": {
+    "node": ">=18"
   },
   "keywords": [
     "solidjs component",
