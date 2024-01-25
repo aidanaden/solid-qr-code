@@ -47,9 +47,6 @@ devDependencies:
   jsdom:
     specifier: ^23.2.0
     version: 23.2.0
-  qr.js:
-    specifier: ^0.0.0
-    version: 0.0.0
   solid-js:
     specifier: ^1.8.11
     version: 1.8.11
@@ -3333,10 +3330,6 @@ packages:
   /punycode@2.3.1:
     resolution: {integrity: sha512-vYt7UD1U9Wg6138shLtLOvdAu+8DsC/ilFtEVHcH+wydcSpNE20AfSOduf6MkRFahL5FY7X1oU7nKVZFtfq8Fg==}
     engines: {node: '>=6'}
-    dev: true
-
-  /qr.js@0.0.0:
-    resolution: {integrity: sha512-c4iYnWb+k2E+vYpRimHqSu575b1/wKl4XFeJGpFmrJQz5I88v9aY2czh7s0w36srfCM1sXgC/xpoJz5dJfq+OQ==}
     dev: true
 
   /querystringify@2.2.0:
