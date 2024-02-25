@@ -1,9 +1,17 @@
-import "highlight.js/styles/stackoverflow-light.css";
-import { Highlight } from "solid-highlight";
-import { createMemo, createSignal } from "solid-js";
+import { Highlight, Language } from "solid-highlight";
+import { For, createEffect, createMemo, createSignal } from "solid-js";
+// import { ErrorLevel, QRCodeCanvas } from "solid-qr-code";
+import { ErrorCorrectionLevel, QRCodeCanvas, QRCodeSVG } from "solid-qr-code";
 
-import { ErrorLevel, QRCodeCanvas, QRCodeSVG } from "../../src";
-import "./main.css";
+import "@unocss/reset/tailwind.css";
+import "virtual:uno.css";
+
+import "prismjs/components/prism-typescript";
+import "prismjs/components/prism-zig";
+import "prismjs/plugins/line-numbers/prism-line-numbers";
+
+import "prismjs/plugins/line-numbers/prism-line-numbers.css";
+import "prismjs/themes/prism-okaidia.min.css";
 
 function makeExampleCode(
   componentName: string,
@@ -20,7 +28,7 @@ function makeExampleCode(
   size: number,
   bgColor: string,
   fgColor: string,
-  level: ErrorLevel,
+  // level: ErrorLevel,
   marginSize: number,
   includeImage: boolean
 ) {
@@ -48,19 +56,21 @@ function makeExampleCode(
   size={${size}}
   bgColor={"${bgColor}"}
   fgColor={"${fgColor}"}
-  level={"${level}"}
   ${minVersionCode}marginSize={${marginSize}}${imageSettingsCode}
 />`;
 }
 
 function FullDemo() {
+  const [language, setLanguage] = createSignal<Language>(Language.TYPESCRIPT);
   const [value, setValue] = createSignal(
     "https://picturesofpeoplescanningqrcodes.tumblr.com/"
   );
   const [size, setSize] = createSignal(128);
   const [fgColor, setFgColor] = createSignal("#000000");
   const [bgColor, setBgColor] = createSignal("#ffffff");
-  const [level, setLevel] = createSignal<ErrorLevel>("L");
+  const [level, setLevel] = createSignal<ErrorCorrectionLevel>(
+    ErrorCorrectionLevel.LOW
+  );
   const [minVersion, setMinVersion] = createSignal(1);
   const [marginSize, setMarginSize] = createSignal(0);
   const [title, setTitle] = createSignal("Title for my QR Code");
@@ -92,7 +102,6 @@ function FullDemo() {
       size(),
       bgColor(),
       fgColor(),
-      level(),
       marginSize(),
       includeImage()
     )
@@ -113,11 +122,13 @@ function FullDemo() {
       size(),
       bgColor(),
       fgColor(),
-      level(),
       marginSize(),
       includeImage()
     )
   );
+  createEffect(() => {
+    console.log({ h: imageH(), w: imageW() });
+  });
 
   return (
     <div class="flex flex-row gap-4 p-4">
@@ -141,7 +152,7 @@ function FullDemo() {
             <input
               class="border p-1"
               type="color"
-              onChange={(e) => setBgColor(e.target.value)}
+              onInput={(e) => setBgColor(e.target.value)}
               value={bgColor()}
             />
           </label>
@@ -153,7 +164,7 @@ function FullDemo() {
             <input
               class="border p-1"
               type="color"
-              onChange={(e) => setFgColor(e.target.value)}
+              onInput={(e) => setFgColor(e.target.value)}
               value={fgColor()}
             />
           </label>
@@ -163,13 +174,16 @@ function FullDemo() {
             Error Level:
             <br />
             <select
-              onChange={(e) => setLevel(e.target.value as ErrorLevel)}
+              onChange={(e) => setLevel(e.target.value as ErrorCorrectionLevel)}
               value={level()}
             >
-              <option value="L">L</option>
-              <option value="M">M</option>
-              <option value="Q">Q</option>
-              <option value="H">H</option>
+              <For each={Object.values(ErrorCorrectionLevel)}>
+                {(l) => (
+                  <option value={l} selected={l === level()}>
+                    {l}
+                  </option>
+                )}
+              </For>
             </select>
           </label>
         </div>
@@ -263,7 +277,11 @@ function FullDemo() {
                 class="border p-1"
                 type="number"
                 value={imageW()}
-                onChange={(e) => setImageW(parseInt(e.target.value, 10))}
+                onInput={(e) => {
+                  const width = parseInt(e.target.value, 10);
+                  console.log({ width });
+                  setImageW(width);
+                }}
               />
             </label>
           </div>
@@ -356,10 +374,20 @@ function FullDemo() {
           <h2>
             <pre>QRCodeSVG</pre>
           </h2>
-          <Highlight class="text-sm" autoDetect={true}>
+          <Highlight class="text-sm line-numbers" language={language()}>
             {svgCode()}
           </Highlight>
           <QRCodeSVG
+            value={value()}
+            height={imageH()}
+            width={imageW()}
+            backgroundColor={bgColor()}
+            foregroundColor={fgColor()}
+            backgroundAlpha={imageOpacity()}
+            foregroundAlpha={imageOpacity()}
+            level={level()}
+          />
+          {/* <QRCodeSVG
             value={value()}
             title={title()}
             size={size()}
@@ -381,17 +409,29 @@ function FullDemo() {
                   }
                 : undefined
             }
-          />
+          /> */}
         </div>
 
         <div>
           <h2>
             <pre>QRCodeCanvas</pre>
           </h2>
-          <Highlight class="text-sm" autoDetect={true}>
+          <Highlight class="text-sm line-numbers" language={language()}>
             {canvasCode()}
           </Highlight>
           <QRCodeCanvas
+            backgroundAlpha={imageOpacity()}
+            foregroundAlpha={imageOpacity()}
+            value={value()}
+            height={imageH()}
+            width={imageW()}
+            backgroundColor={bgColor()}
+            foregroundColor={fgColor()}
+            level={level()}
+            x={imageX()}
+            y={imageY()}
+          />
+          {/* <QRCodeCanvas
             value={value()}
             title={title()}
             size={size()}
@@ -413,7 +453,7 @@ function FullDemo() {
                   }
                 : undefined
             }
-          />
+          /> */}
         </div>
       </div>
     </div>

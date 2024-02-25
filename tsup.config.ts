@@ -33,7 +33,7 @@ export default defineConfig((config) => {
     const package_fields = preset.generatePackageExports(parsed_options);
 
     console.log(
-      `package.json: \n\n${JSON.stringify(package_fields, null, 2)}\n\n`,
+      `package.json: \n\n${JSON.stringify(package_fields, null, 2)}\n\n`
     );
 
     // will update ./package.json with the correct export fields
