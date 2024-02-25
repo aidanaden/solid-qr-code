@@ -1,5 +1,11 @@
 # solid-qr-code
 
+## 0.1.11
+
+### Patch Changes
+
+- feat: twotone, test
+
 ## 0.1.10
 
 ### Patch Changes

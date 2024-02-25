@@ -6,7 +6,7 @@ import {
   QRCodeSVG,
   QRCodeText,
   QRCodeTwoTone,
-} from "../../src";
+} from "solid-qr-code";
 
 import "@unocss/reset/tailwind.css";
 import "virtual:uno.css";
