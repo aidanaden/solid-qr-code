@@ -1,15 +1,12 @@
 import { defaultFrameOptions, generateFrame } from "scannable/qr";
 import {
   Component,
-  ComponentProps,
   For,
   JSX,
   createEffect,
   createMemo,
   mergeProps,
 } from "solid-js";
-
-type Excavation = { x: number; y: number; w: number; h: number };
 
 export type ImageSettings = {
   src: string;
@@ -35,18 +32,6 @@ type QRProps = {
   title?: string;
   minVersion?: number;
 };
-type QRPropsCanvas = QRProps & ComponentProps<"canvas">;
-type QRPropsSVG = QRProps & ComponentProps<"svg">;
-
-const DEFAULT_SIZE = 128;
-// const DEFAULT_LEVEL: ErrorLevel = "L";
-const DEFAULT_BGCOLOR = "#FFFFFF";
-const DEFAULT_FGCOLOR = "#000000";
-const DEFAULT_INCLUDEMARGIN = false;
-const DEFAULT_MINVERSION = 1;
-
-const SPEC_MARGIN_SIZE = 4;
-const DEFAULT_MARGIN_SIZE = 0;
 
 export const ErrorCorrectionLevel = {
   LOW: "low",

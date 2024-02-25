@@ -1,6 +1,5 @@
 import { Highlight, Language } from "solid-highlight";
-import { For, createEffect, createMemo, createSignal } from "solid-js";
-// import { ErrorLevel, QRCodeCanvas } from "solid-qr-code";
+import { For, createMemo, createSignal } from "solid-js";
 import { ErrorCorrectionLevel, QRCodeCanvas, QRCodeSVG } from "solid-qr-code";
 
 import "@unocss/reset/tailwind.css";
@@ -126,9 +125,6 @@ function FullDemo() {
       includeImage()
     )
   );
-  createEffect(() => {
-    console.log({ h: imageH(), w: imageW() });
-  });
 
   return (
     <div class="flex flex-row gap-4 p-4">
