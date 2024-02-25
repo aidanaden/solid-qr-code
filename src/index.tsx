@@ -1,11 +1,13 @@
 import { defaultFrameOptions, generateFrame } from "scannable/qr";
 import {
   Component,
+  ComponentProps,
   For,
   JSX,
   createEffect,
   createMemo,
   mergeProps,
+  splitProps,
 } from "solid-js";
 
 export type ImageSettings = {
@@ -70,10 +72,6 @@ export type FrameOptions = {
 
 /**
  * Renders a QR code into an SVG html string.
- *
- * @param options - the options to use for the frame.
- *
- * @returns The QR code html as a string
  */
 export type QRSVGProps = FrameOptions & {
   readonly backgroundColor: string;
@@ -87,13 +85,13 @@ export type QRSVGProps = FrameOptions & {
 export const QRCodeSVG: Component<QRSVGProps> = (_props) => {
   const props = mergeProps(
     {
+      ...defaultFrameOptions,
       backgroundColor: "white",
       backgroundAlpha: 1,
       foregroundColor: "black",
       foregroundAlpha: 1,
       width: 100,
       height: 100,
-      ...defaultFrameOptions,
     },
     _props
   );
@@ -153,15 +151,11 @@ export type QRCanvasProps = FrameOptions & {
 
 /**
  * Renders a QR code onto a canvas context
- *
- * @param options - the options to use for the frame.
- * @param context - The canvas context to use
- * @param width - The width of the QR code, **not the canvas**
- * @param height - The height of the QR code, **not the canvas**
  */
 export const QRCodeCanvas: Component<QRCanvasProps> = (_props) => {
   const props = mergeProps(
     {
+      ...defaultFrameOptions,
       backgroundColor: "white",
       backgroundAlpha: 1,
       foregroundColor: "black",
@@ -170,7 +164,6 @@ export const QRCodeCanvas: Component<QRCanvasProps> = (_props) => {
       height: 100,
       x: 0,
       y: 0,
-      ...defaultFrameOptions,
     },
     _props
   );
@@ -222,5 +215,143 @@ export const QRCodeCanvas: Component<QRCanvasProps> = (_props) => {
     }
   });
 
-  return <canvas ref={(e) => (ref = e)} />;
+  return (
+    <canvas ref={(e) => (ref = e)} height={props.height} width={props.width} />
+  );
+};
+
+type QRTextProps = FrameOptions & {
+  /** The activated characters (black on a regular QR code.) */
+  readonly foregroundChar?: string | undefined;
+  /** The non-activated characters (white on a regular QR code) */
+  readonly backgroundChar?: string | undefined;
+} & ComponentProps<"h1">;
+
+/**
+ * Render a QR code in text format.
+ */
+export const QRCodeText: Component<QRTextProps> = (_props) => {
+  const props = mergeProps(
+    {
+      ...defaultFrameOptions,
+      foregroundChar: "#",
+      backgroundChar: " ",
+    },
+    _props
+  );
+  const [, rest] = splitProps(props, [
+    "foregroundChar",
+    "backgroundChar",
+    "value",
+    "level",
+    "maskType",
+    "innerHTML",
+    "style",
+  ]);
+  const frame = createMemo(() => generateFrame(props));
+  const qrText = createMemo(() => {
+    let str = "";
+    for (let i = 0; i < frame().size; i++) {
+      for (let j = 0; j < frame().size; j++) {
+        if (frame().buffer[j * frame().size + i]) {
+          str += props.foregroundChar;
+        } else {
+          str += props.backgroundChar;
+        }
+      }
+      if (i !== frame().size - 1) {
+        str += "\n";
+      }
+    }
+    str = str.replaceAll("\n", "<br/>").replaceAll(" ", "&nbsp;");
+    return str;
+  });
+  return (
+    <h1
+      style={{
+        "line-height": "8px",
+        "letter-spacing": "0",
+        "font-size": "12px",
+        "margin-top": "2.5rem",
+        "margin-bottom": "2.5rem",
+        "font-family": "monospace",
+        ...(typeof props.style === "object" ? props.style : {}),
+      }}
+      innerHTML={qrText()}
+      {...rest}
+    />
+  );
+};
+
+type QRTwoToneProps = FrameOptions & {
+  readonly solidCharacter?: string | undefined;
+  readonly solidTopCharacter?: string | undefined;
+  readonly solidBottomCharacter?: string | undefined;
+  readonly emptyCharacter?: string | undefined;
+} & ComponentProps<"h1">;
+
+/**
+ * Renders a QR code with 4 different characters (to compact size)
+ */
+export const QRCodeTwoTone: Component<QRTwoToneProps> = (_props) => {
+  const props = mergeProps(
+    {
+      ...defaultFrameOptions,
+      solidCharacter: "█",
+      solidTopCharacter: "▀",
+      solidBottomCharacter: "▄",
+      emptyCharacter: " ",
+    },
+    _props
+  );
+  const [, rest] = splitProps(props, [
+    "value",
+    "level",
+    "maskType",
+    "innerHTML",
+    "style",
+    "solidCharacter",
+    "solidBottomCharacter",
+    "solidTopCharacter",
+    "emptyCharacter",
+  ]);
+  const qrText = createMemo(() => {
+    const frame = generateFrame(props);
+    let str = "";
+    for (let i = 0; i < frame.size; i += 2) {
+      for (let j = 0; j < frame.size; j++) {
+        const topExists = frame.buffer[i * frame.size + j];
+        const bottomExists = frame.buffer[(i + 1) * frame.size + j];
+
+        if (topExists && bottomExists) {
+          str += props.solidCharacter;
+        } else if (!topExists && bottomExists) {
+          str += props.solidBottomCharacter;
+        } else if (topExists && !bottomExists) {
+          str += props.solidTopCharacter;
+        } else {
+          str += props.emptyCharacter;
+        }
+      }
+      if (i !== frame.size - 1) {
+        str += "\n";
+      }
+    }
+    str = str.replaceAll("\n", "<br/>").replaceAll(" ", "&nbsp;");
+    return str;
+  });
+  return (
+    <h1
+      style={{
+        "line-height": "12px",
+        "font-size": "12px",
+        "margin-top": "2.5rem",
+        "margin-bottom": "2.5rem",
+        "font-family": "monospace",
+        ...(typeof props.style === "object" ? props.style : {}),
+      }}
+      innerHTML={qrText()}
+      {...rest}
+    />
+  );
 };

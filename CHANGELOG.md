@@ -1,5 +1,23 @@
 # solid-qr-code
 
+## 0.1.10
+
+### Patch Changes
+
+- test: add br, nbsp
+
+## 0.1.9
+
+### Patch Changes
+
+- test: remove html replacements
+
+## 0.1.8
+
+### Patch Changes
+
+- feat: qr code text
+
 ## 0.1.7
 
 ### Patch Changes

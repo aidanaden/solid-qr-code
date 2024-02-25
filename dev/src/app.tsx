@@ -1,6 +1,12 @@
 import { Highlight, Language } from "solid-highlight";
 import { For, createMemo, createSignal } from "solid-js";
-import { ErrorCorrectionLevel, QRCodeCanvas, QRCodeSVG } from "solid-qr-code";
+import {
+  ErrorCorrectionLevel,
+  QRCodeCanvas,
+  QRCodeSVG,
+  QRCodeText,
+  QRCodeTwoTone,
+} from "../../src";
 
 import "@unocss/reset/tailwind.css";
 import "virtual:uno.css";
@@ -74,8 +80,8 @@ function FullDemo() {
   const [marginSize, setMarginSize] = createSignal(0);
   const [title, setTitle] = createSignal("Title for my QR Code");
   const [includeImage, setIncludeImage] = createSignal(true);
-  const [imageH, setImageH] = createSignal(24);
-  const [imageW, setImageW] = createSignal(24);
+  const [imageH, setImageH] = createSignal(240);
+  const [imageW, setImageW] = createSignal(240);
   const [imageX, setImageX] = createSignal(0);
   const [imageY, setImageY] = createSignal(0);
   const [imageOpacity, setImageOpacity] = createSignal(1);
@@ -383,29 +389,6 @@ function FullDemo() {
             foregroundAlpha={imageOpacity()}
             level={level()}
           />
-          {/* <QRCodeSVG
-            value={value()}
-            title={title()}
-            size={size()}
-            fgColor={fgColor()}
-            bgColor={bgColor()}
-            level={level()}
-            marginSize={marginSize()}
-            minVersion={minVersion()}
-            imageSettings={
-              includeImage()
-                ? {
-                    src: imageSrc(),
-                    height: imageH(),
-                    width: imageW(),
-                    x: centerImage() ? undefined : imageX(),
-                    y: centerImage() ? undefined : imageY(),
-                    excavate: imageExcavate(),
-                    opacity: imageOpacity(),
-                  }
-                : undefined
-            }
-          /> */}
         </div>
 
         <div>
@@ -427,29 +410,31 @@ function FullDemo() {
             x={imageX()}
             y={imageY()}
           />
-          {/* <QRCodeCanvas
+        </div>
+
+        <div>
+          <h2>
+            <pre>QRCodeTwoTone</pre>
+          </h2>
+          <Highlight class="text-sm line-numbers" language={language()}>
+            {svgCode()}
+          </Highlight>
+          <QRCodeTwoTone value={value()} level={level()} />
+        </div>
+
+        <div>
+          <h2>
+            <pre>QRCodeText</pre>
+          </h2>
+          <Highlight class="text-sm line-numbers" language={language()}>
+            {svgCode()}
+          </Highlight>
+          <QRCodeText
             value={value()}
-            title={title()}
-            size={size()}
-            fgColor={fgColor()}
-            bgColor={bgColor()}
+            backgroundChar={" "}
+            foregroundChar={"*"}
             level={level()}
-            marginSize={marginSize()}
-            minVersion={minVersion()}
-            imageSettings={
-              includeImage()
-                ? {
-                    src: imageSrc(),
-                    height: imageH(),
-                    width: imageW(),
-                    x: centerImage() ? undefined : imageX(),
-                    y: centerImage() ? undefined : imageY(),
-                    excavate: imageExcavate(),
-                    opacity: imageOpacity(),
-                  }
-                : undefined
-            }
-          /> */}
+          />
         </div>
       </div>
     </div>

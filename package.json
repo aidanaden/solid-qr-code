@@ -1,6 +1,6 @@
 {
   "name": "solid-qr-code",
-  "version": "0.1.7",
+  "version": "0.1.10",
   "description": "Solid component to generate QR codes, based on qrcode.react",
   "license": "MIT",
   "author": {
