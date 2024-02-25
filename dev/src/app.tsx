@@ -11,8 +11,7 @@ import {
 import "@unocss/reset/tailwind.css";
 import "virtual:uno.css";
 
-import "prismjs/components/prism-typescript";
-import "prismjs/components/prism-zig";
+import "prismjs/components/prism-jsx";
 import "prismjs/plugins/line-numbers/prism-line-numbers";
 
 import "prismjs/plugins/line-numbers/prism-line-numbers.css";
@@ -54,7 +53,8 @@ function makeExampleCode(
       ? `minVersion={${minVersion}}
 `
       : "";
-  return `import {${componentName}} from 'solid-qr-code';
+  return `import { ${componentName} } from 'solid-qr-code';
+
 <${componentName}
   value={"${value}"}
   title={"${title}"}
@@ -66,7 +66,7 @@ function makeExampleCode(
 }
 
 function FullDemo() {
-  const [language, setLanguage] = createSignal<Language>(Language.TYPESCRIPT);
+  const [language, setLanguage] = createSignal<Language>(Language.REACT_JSX);
   const [value, setValue] = createSignal(
     "https://picturesofpeoplescanningqrcodes.tumblr.com/"
   );
