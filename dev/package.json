@@ -4,6 +4,7 @@
   "scripts": {
     "dev": "vinxi dev",
     "build": "vinxi build",
+    "build:dev": "DEVELOPMENT=1 vinxi build",
     "start": "vinxi start"
   },
   "dependencies": {

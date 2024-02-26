@@ -5,7 +5,9 @@ export default defineConfig({
   start: {
     ssr: true,
     server: {
-      preset: "cloudflare-pages-static",
+      preset: process.env.DEVELOPMENT
+        ? "node-server"
+        : "cloudflare-pages-static",
     },
   },
   ssr: {
