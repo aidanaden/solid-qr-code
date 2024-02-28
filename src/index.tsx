@@ -74,13 +74,13 @@ export type FrameOptions = {
  * Renders a QR code into an SVG html string.
  */
 export type QRSVGProps = FrameOptions & {
-  readonly backgroundColor: string;
-  readonly backgroundAlpha: number;
-  readonly foregroundColor: string;
-  readonly foregroundAlpha: number;
-  readonly width: number;
-  readonly height: number;
-  readonly value: string;
+  readonly backgroundColor?: string | undefined;
+  readonly backgroundAlpha?: number | undefined;
+  readonly foregroundColor?: string | undefined;
+  readonly foregroundAlpha?: number | undefined;
+  readonly width?: number | undefined;
+  readonly height?: number | undefined;
+  readonly value?: string | undefined;
 };
 export const QRCodeSVG: Component<QRSVGProps> = (_props) => {
   const props = mergeProps(
@@ -139,14 +139,14 @@ export const QRCodeSVG: Component<QRSVGProps> = (_props) => {
 };
 
 export type QRCanvasProps = FrameOptions & {
-  readonly backgroundColor: string;
-  readonly backgroundAlpha: number;
-  readonly foregroundColor: string;
-  readonly foregroundAlpha: number;
-  readonly width: number;
-  readonly height: number;
-  readonly x: number;
-  readonly y: number;
+  readonly backgroundColor?: string | undefined;
+  readonly backgroundAlpha?: number | undefined;
+  readonly foregroundColor?: string | undefined;
+  readonly foregroundAlpha?: number | undefined;
+  readonly width?: number | undefined;
+  readonly height?: number | undefined;
+  readonly x?: number | undefined;
+  readonly y?: number | undefined;
 };
 
 /**
