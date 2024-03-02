@@ -1,0 +1,24 @@
+{
+  "name": "example",
+  "type": "module",
+  "scripts": {
+    "dev": "vinxi dev",
+    "build": "vinxi build",
+    "build:dev": "DEVELOPMENT=1 vinxi build",
+    "start": "vinxi start"
+  },
+  "dependencies": {
+    "@solidjs/start": "^0.6.0",
+    "@unocss/reset": "^0.58.5",
+    "solid-highlight": "^0.1.26",
+    "solid-js": "^1.8.15",
+    "solid-qr-code": "^0.1.11",
+    "vinxi": "^0.3.4"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "devDependencies": {
+    "unocss": "^0.58.5"
+  }
+}
