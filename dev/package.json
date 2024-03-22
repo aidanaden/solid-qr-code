@@ -8,12 +8,12 @@
     "start": "vinxi start"
   },
   "dependencies": {
-    "@solidjs/start": "^1.0.0-rc.0",
+    "@solidjs/start": "^0.7.5",
     "@unocss/reset": "^0.58.6",
     "solid-highlight": "^0.1.26",
     "solid-js": "^1.8.16",
     "solid-qr-code": "^0.1.11",
-    "vinxi": "0.3.4"
+    "vinxi": "^0.3.10"
   },
   "engines": {
     "node": ">=20"
