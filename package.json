@@ -81,7 +81,7 @@
     "typescript": "^5.4.3"
   },
   "engines": {
-    "node": ">=22"
+    "node": ">=20"
   },
   "keywords": [
     "solidjs component",
