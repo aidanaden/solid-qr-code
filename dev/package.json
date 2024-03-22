@@ -8,17 +8,17 @@
     "start": "vinxi start"
   },
   "dependencies": {
-    "@solidjs/start": "^0.6.0",
-    "@unocss/reset": "^0.58.5",
+    "@solidjs/start": "^1.0.0-rc.0",
+    "@unocss/reset": "^0.58.6",
     "solid-highlight": "^0.1.26",
-    "solid-js": "^1.8.15",
+    "solid-js": "^1.8.16",
     "solid-qr-code": "^0.1.11",
-    "vinxi": "^0.3.4"
+    "vinxi": "^0.3.10"
   },
   "engines": {
-    "node": ">=18"
+    "node": ">=22"
   },
   "devDependencies": {
-    "unocss": "^0.58.5"
+    "unocss": "^0.58.6"
   }
 }
