@@ -22,5 +22,10 @@ export default defineConfig({
       include: ["prismjs"],
     },
     plugins: [uno()],
+    build: {
+      rollupOptions: {
+        external: ["prismjs"],
+      },
+    },
   },
 });
