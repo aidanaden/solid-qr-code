@@ -16,7 +16,7 @@
     "vinxi": "^0.3.10"
   },
   "engines": {
-    "node": ">=20"
+    "node": ">=22"
   },
   "devDependencies": {
     "unocss": "^0.58.6"
